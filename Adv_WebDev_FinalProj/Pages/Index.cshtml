@@ -1,0 +1,77 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@section scripts
+{
+    <script>
+
+
+        $(document).ready(function () {
+
+
+            console.log("hey");
+            $.ajax({
+
+            
+            
+                url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
+                dataType: "json",
+                contentType: "application/json",
+                method: "GET",
+                timeout: 0,
+               // headers: {
+               //     api-version: "v200",
+               //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
+               //     client: "ABCD",
+               //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
+               //     device-datetime: "2020-06-18T12:07:57.296Z",
+               //     territory: "XX"
+               //}
+                headers: {
+
+                    "api-version": "v200",
+                    "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
+                    "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
+                    "territory": "XX",
+                    "api-version": "v200",
+                    "device-datetime": "2021-08-02T00:02:15.017Z",
+                    "client": "GRAD_0",
+                    "geolocation": "39.142089359523084, -84.51447294615582"
+
+                  
+
+
+
+                }
+
+
+            }).done(function (res) {
+                console.log(res);
+
+
+            }).fail(function (res) {
+
+                console.log(res);
+
+
+
+            })
+
+
+        })
+
+
+    </script>
+
+
+
+
+}

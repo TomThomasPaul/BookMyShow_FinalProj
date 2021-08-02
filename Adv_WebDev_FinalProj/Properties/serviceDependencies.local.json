@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql.local",
+      "connectionId": "Adv_WebDev_FinalProjContext"
+    }
+  }
+}

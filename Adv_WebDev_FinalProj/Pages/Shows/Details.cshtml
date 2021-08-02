@@ -1,0 +1,31 @@
+﻿@page
+@model Adv_WebDev_FinalProj.Pages.Shows.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Show</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Show.ShowDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Show.ShowDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Show.Cinema)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Show.Cinema.CinemaId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Show.ShowId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
