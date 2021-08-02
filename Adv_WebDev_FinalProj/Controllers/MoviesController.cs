@@ -23,9 +23,18 @@ namespace Adv_WebDev_FinalProj.Controllers
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovie()
+        public async Task<ActionResult<IEnumerable<Movie>>> GetMovie(string search)
         {
-            return await _context.Movie.ToListAsync();
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                //return Ok(search);
+                return await _context.Movie.ToListAsync();
+
+            }
+            var movies = await _context.Movie.Where(movie => movie.Title.ToUpper().Contains(search.ToUpper())).ToListAsync();
+            // return await _context.Movie.ToListAsync();
+            return movies;
         }
 
         // GET: api/Movies/5

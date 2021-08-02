@@ -9,64 +9,298 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
+<div id="app">
+    @*<strong>{{ message }}</strong>*@
+    <form>
+        <div class="form-group">
+            <label for="search_movie"></label>
+            <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies...">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button id="btn-book" class="btn btn-primary" v-on:click="bookShow">Book Show</button>
+
+    </form>
+    <div class="movie_list">
+        {{movies}}
+    </div>
+
+    @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
+    <div id="map" style="height:400px;width:100%"></div>
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+
+
+
+</div>
+
 @section scripts
 {
+
     <script>
 
+      
 
-        $(document).ready(function () {
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                // PLACE DATA PROPERTIES HERE
+                message: "Hello World!",
+                movies: [],
+                currentLocation: {
+                    latitude: "",
+                    longitude: ""
+
+                }
+            },
+            mounted: function () {
+                // PERFORM ANY ACTIONS WHEN THE PAGE LOADS HERE - SIMILAR TO JQUERY DOCUMENT.READY
 
 
-            console.log("hey");
-            $.ajax({
+                //dynamic search
+                let self = this;
+                navigator.geolocation.getCurrentPosition(function (location) {
+                    self.currentLocation.latitude = location.coords.latitude
+                    self.currentLocation.longitude = location.coords.longitude;
+                    console.log(self.currentLocation);
 
-            
-            
-                url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
-                dataType: "json",
-                contentType: "application/json",
-                method: "GET",
-                timeout: 0,
-               // headers: {
-               //     api-version: "v200",
-               //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
-               //     client: "ABCD",
-               //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
-               //     device-datetime: "2020-06-18T12:07:57.296Z",
-               //     territory: "XX"
-               //}
-                headers: {
 
-                    "api-version": "v200",
-                    "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
-                    "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
-                    "territory": "XX",
-                    "api-version": "v200",
-                    "device-datetime": "2021-08-02T00:02:15.017Z",
-                    "client": "GRAD_0",
-                    "geolocation": "39.142089359523084, -84.51447294615582"
 
-                  
+                })
 
+                //self.buildMap(self.currentLocation.latitude, self.currentLocation.longitude);
+                self.initMap();
+
+
+                //$("#search_movie").keyup(function () {
+
+
+
+
+
+                //})
+
+
+            },
+            methods: {
+
+                
+                initMap: function initMap() {
+                    // The location of Uluru
+                    let self = this;
+                    console.log(self.currentLocation.latitude);
+                    const home = { lat: -25.344 , lng: 131.036  };
+                    // The map, centered at Uluru
+                    const map = new google.maps.Map(document.getElementById("map"), {
+                        zoom: 4,
+                        center: home,
+                    });
+                    // The marker, positioned at Uluru
+                    const marker = new google.maps.Marker({
+                        position: home,
+                        map: map,
+                    });
+                },
+                // ADD ANY METHODS (CLICK, SUBMIT EVENTS, ETC.)
+
+                dynamicSearch: function () {
+                    let self = this;
+                    console.log(self.$refs.search_movie.value)
+
+                    let search = self.$refs.search_movie.value;
+
+                    self.movies = [];
+
+                    search && $.ajax({
+                        url: "/api/movies/?search=" + search,
+                        dataType: "json",
+                        contentType: "application/json",
+                        method: "GET",
+
+                    }).done(function (movies) {
+                        console.log(movies);
+                        self.movies = movies;
+
+
+                       
+
+
+                    }).fail(function (err) {
+
+                        console.log(err);
+
+
+                    })
+
+
+
+
+
+                },
+
+                
+
+
+
+                bookShow: function (e) {
+
+                    e.preventDefault();
+
+                    let self = this;
+                    let newBooking = {
+
+                        bookingDate: new Date(),
+                        showId: 1,
+                        userName: "Pratibha",
+                        userEmail: "pt@gmail.com",
+                        userPhone: "5134256378"
+
+
+
+
+
+                    };
+
+                    $.ajax({
+                        url: "/api/bookings",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(newBooking),
+                        method: "POST"
+
+
+
+
+                    }).done(function (booking) {
+                        console.log(booking);
+
+                        //$(".listings-display").append(`<tr id="listing-${listing.id}"">
+                        //         <th scope="row">${listing.listingname}</th>
+                        //         <td>${listing.listingprice}</td>
+                        //         <td class="checkbox"><input type="checkbox" checked="checked" id="availability-${listing.id}" disabled="true"/></td>
+                        //         <td>${listing.posteddate}</td>
+                        //         <td>${listing.areasqft}</td>
+                        //         <td><td><button id="btn-delete-${listing.id}" class="btn btn-danger">Delete Listing</button>  <button id="btn-update-${listing.id}" class="btn btn-warning">Edit</button></td></td>
+                        //         </tr>`)
+
+                        alert(` A new booking for user ${booking.userName} has been created`);
+
+
+
+
+
+
+                    }).fail(function (error) {
+                        alert(`error while creating a booking: ${JSON.stringify(error.responseJSON.errors)}`);
+                        console.log(error);
+
+
+
+                    })
 
 
                 }
 
 
-            }).done(function (res) {
-                console.log(res);
+            },
+            computed: {
+                // CREATE ANY CALCULATED PROPERTIES HERE. THEY BEHAVE LIKE READ-ONLY DATA
+            }
+        });
 
 
-            }).fail(function (res) {
-
-                console.log(res);
 
 
 
-            })
 
 
-        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //$(document).ready(function () {
+
+
+                //    console.log("hey");
+                //    $.ajax({
+
+
+
+                //        url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
+                //        dataType: "json",
+                //        contentType: "application/json",
+                //        method: "GET",
+                //        timeout: 0,
+                //       // headers: {
+                //       //     api-version: "v200",
+                //       //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
+                //       //     client: "ABCD",
+                //       //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
+                //       //     device-datetime: "2020-06-18T12:07:57.296Z",
+                //       //     territory: "XX"
+                //       //}
+                //        headers: {
+
+                //            "api-version": "v200",
+                //            "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
+                //            "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
+                //            "territory": "XX",
+                //            "api-version": "v200",
+                //            "device-datetime": "2021-08-02T00:02:15.017Z",
+                //            "client": "GRAD_0",
+                //            "geolocation": "39.142089359523084, -84.51447294615582"
+
+
+
+
+
+                //        }
+
+
+                //    }).done(function (res) {
+                //        console.log(res);
+
+
+                //    }).fail(function (res) {
+
+                //        console.log(res);
+
+
+
+                //    })
+
+
+                //})
 
 
     </script>
