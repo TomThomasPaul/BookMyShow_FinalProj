@@ -4,52 +4,55 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
 <div id="app">
     @*<strong>{{ message }}</strong>*@
     <form>
-        <div class="form-group">
+        <div class="form-group form-floating">
             <label for="search_movie"></label>
             <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies...">
         </div>
         <button type="submit" class="btn btn-primary">Search</button>
-        <button id="btn-book" class="btn btn-primary" v-on:click="bookShow">Book Show</button>
+        <!--<button id="btn-book" class="btn btn-primary" v-on:click="bookShow">Book Show</button>-->
 
     </form>
     <div class="movie_list">
         <div v-for="movie in movies">
             {{/*movies*/}}
-            <div class="movie-container" :id="'movie-' + movie.movieId">
-                <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas">
+            <div class="movie-container" :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true">
+                <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
                 @*<h2>{{movie.title}}</h2>*@
             </div>
-
-
         </div>
     </div>
+    <div class="row">
+        <div class="col" v-show="ui.showCinema">
+            <h6 class="display-4 text-center">Cinemas</h6>
+            <div class="cinema_list">
+                <div v-for="cinema in cinemas">
 
-    <div class="cinema_list">
-        <div v-for="cinema in cinemas">
-
-            <div class="form-check" :id="'cinema-' + cinema.cinemaId">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio">
-                <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
-                    {{cinema.cinemaName}}
-                </label>
+                    <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true" >
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio">
+                        <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
+                            {{cinema.cinemaName}}
+                        </label>
+                    </div>
+                    
+                </div>
             </div>
-
-
+        </div>
+        <div class="col" v-show="ui.showShow">
+            <h6 class="display-4 text-center">Shows</h6>
+            <button id="btn-book" class="btn btn-primary align-content-center" v-on:click="bookShow">Book Show</button>
         </div>
     </div>
 
 
-    @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
-    <div id="map" style="height:400px;width:100%"></div>
-    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <div v-show="ui.showCinema">
+        @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
+        <div id="map" style="height:400px;width:100%"></div>
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    </div>
+    
 
 
 
@@ -74,6 +77,11 @@
                     latitude: "",
                     longitude: ""
 
+                },
+                ui: {
+                    showCinema: false,
+                    showShow: false,
+                    showCinemaShow: false
                 }
             },
             mounted: function () {
@@ -157,12 +165,16 @@
                 // ADD ANY METHODS (CLICK, SUBMIT EVENTS, ETC.)
 
                 dynamicSearch: function () {
+
                     let self = this;
+                    
                     console.log(self.$refs.search_movie.value)
 
                     let search = self.$refs.search_movie.value;
 
                     self.movies = [];
+                    self.ui.showCinema = false;
+                    self.ui.showShow = false;
 
                     search && $.ajax({
                         url: "/api/movies/?search=" + search,
