@@ -1,98 +1,150 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.Extensions.Options
+@inject IOptions<StripeSettings> Stripe
 @{
     ViewData["Title"] = "Home page";
 }
+@*<form action="/api/bookings/charge" method="POST">
+        <label>Amount: 500$</label>
+        <script src="//checkout.stripe.com/v2/checkout.js"
+                class="stripe-button"
+                data-key="@Stripe.Value.PublishableKey"
+                data-description="This is the cost of movie ticket"
+                data-amount="500">
+        </script>
 
-<div id="app">
-    @*<strong>{{ message }}</strong>*@
-    <form>
-        <div class="form-group form-floating">
-            <label for="search_movie"></label>
-            <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies...">
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-        <!--<button id="btn-book" class="btn btn-primary" v-on:click="bookShow">Book Show</button>-->
 
-    </form>
-    <div class="movie_list">
-        <div v-for="movie in movies">
-            {{/*movies*/}}
-            <div class="movie-container" :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true">
-                <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
-                @*<h2>{{movie.title}}</h2>*@
+    </form>*@
+<body>
+
+
+    <div id="app">
+        @*<strong>{{ message }}</strong>*@
+        <form>
+            <div class="form-group form-floating">
+                <label for="search_movie"></label>
+                <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies...">
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col" v-show="ui.showCinema">
-            <h6 class="display-4 text-center">Cinemas</h6>
-            <div class="cinema_list">
-                <div v-for="cinema in cinemas">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <!--<button id="btn-book" class="btn btn-primary" v-on:click="bookShow">Book Show</button>-->
 
-                    <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio">
-                        <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
-                            {{cinema.cinemaName}}
-                        </label>
-                    </div>
-
+        </form>
+        <div class="movie_list">
+            <div v-for="movie in movies">
+                {{/*movies*/}}
+                <div class="movie-container" :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true">
+                    <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
+                    @*<h2>{{movie.title}}</h2>*@
                 </div>
             </div>
         </div>
-        <div class="col" v-show="ui.showShow">
-            <h6 class="display-4 text-center">Shows</h6>
-            <div class="d-flex flex-row bd-highlight mb-3">
-                <div v-for="show in shows">
-                    <button type="button" class="btn btn-warning" :id="'show-'+ show.showId" v-on:click="{{ui.showBookingForm=true;currentShow=show.showId}}">{{show.showDate}}</button>
-                    <span>{{show.seatsAvailable}}</span>
+        <div class="row">
+            <div class="col" v-show="ui.showCinema">
+                <h6 class="display-4 text-center">Cinemas</h6>
+                <div class="cinema_list">
+                    <div v-for="cinema in cinemas">
+
+                        <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio">
+                            <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
+                                {{cinema.cinemaName}}
+                            </label>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-          
-            
-            <div v-show="ui.showBookingForm">
-                {{"booking form"}}
-                <form>
-                    <div class="form-group">
-                        <label for="username">User Name</label>
-                        <input type="text" class="form-control" id="username" ref="username" placeholder="User Name">
+            <div class="col" v-show="ui.showShow">
+                <h6 class="display-4 text-center">Shows</h6>
+                <div class="d-flex flex-row bd-highlight mb-3">
+                    <div v-for="show in shows">
+                        <button type="button" class="btn btn-warning" :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.showDate}}</button>
+                        <span>{{show.seatsAvailable}}</span>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">Enter you email</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
-                    </div>
+                </div>
 
-                    <button id="btn-book" class="btn btn-primary align-content-center" v-on:click="bookShow">Book Show</button>
-                </form>
+
+                <div v-show="ui.showBookingForm">
+                    {{"booking form"}}
+                    <form>
+                        <div class="form-group">
+                            <label for="username">User Name</label>
+                            <input type="text" class="form-control" id="username" ref="username" placeholder="User Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">Enter you email</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
+                        </div>
+
+                        <button id="btn-book" class="btn btn-primary align-content-center" v-on:click="bookShow">Book Show</button>
+                    </form>
+
+                    <form action="/api/bookings/charge" method="post" v-on:click="stripeSubmit">
+                        <label>amount: 500$</label>
+                        <script src="//checkout.stripe.com/v2/checkout.js"
+                                class="stripe-button"
+                                data-key="@Stripe.Value.PublishableKey"
+                                data-description="this is the cost of movie ticket"
+                                data-amount="500">
+                        </script>
+
+
+                    </form>
+
+
+                </div>
+              
+
 
             </div>
+
         </div>
+
+
+        <div v-show="ui.showCinema">
+            @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
+            <div id="map" style="height:400px;width:100%"></div>
+            <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+        </div>
+
         
-    </div>
-
-
-    <div v-show="ui.showCinema">
-        @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
-        <div id="map" style="height:400px;width:100%"></div>
-        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    </div>
+        @*<iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-c456b1a6ebc647ce3961b938c679c5e5.html?distinct_id=3b5850e5-4ae0-6dbd-35c4-ed34a99d11e5" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: block; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe>*@
+        @*<iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-c456b1a6ebc647ce3961b938c679c5e5.html?distinct_id=0f90404e-a6bc-dec5-fa6a-859b4bc8f7ca" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: block; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe>*@
     
 
 
+    </div>
 
-</div>
+    <div class="stripecheckout"  >
+            <form action="/api/movies" method="post" class="stripeForm">
+                <label>amount: 500$</label>
+                <script  src="//checkout.stripe.com/v2/checkout.js"
+                        class="stripe-button"
+                        data-key="@Stripe.Value.PublishableKey"
+                        data-description="this is the cost of movie ticket"
+                        data-amount="500" >
+                </script>
+
+
+            </form>
+
+    </div>
+
+</body>
 
 @section scripts
 {
-
+    @*<script src="//checkout.stripe.com/v2/checkout.js"></script>*@
+            
     <script>
 
-      
+
 
 
         var app = new Vue({
@@ -113,7 +165,8 @@
                     showCinema: false,
                     showShow: false,
                     showCinemaShow: false,
-                    showBookingForm: false
+                    showBookingForm: false,
+                    showStripe: false
                 }
             },
             mounted: function () {
@@ -126,7 +179,7 @@
                     self.currentLocation.latitude = location.coords.latitude
                     self.currentLocation.longitude = location.coords.longitude;
                     //console.log(self.currentLocation);
-
+                    console.log(self);
 
 
                 })
@@ -136,7 +189,14 @@
 
 
                 //$("#search_movie").keyup(function () {
+                let externalScript = document.createElement('script')
+                externalScript.setAttribute('src', 'https://checkout.stripe.com/v2/checkout.js')
+                //$(".stripecheckout").append(externalScript);
+                console.log($(".stripecheckout").hide())
+                //$(".stripeForm").submit(function (e) {
 
+                //    e.preventDefault();
+                //})
 
 
 
@@ -148,7 +208,7 @@
             methods: {
 
 
-                initMap: function initMap(cinemas,zoomIn=false) {
+                initMap: function initMap(cinemas, zoomIn = false) {
                     // The location of 3 markers
                     let self = this;
                     console.log("this is inside initmap");
@@ -165,7 +225,7 @@
                         //const columbus = { lat: 39.9612, lng: -82.9988 };
                         // The map, centered at Uluru
                         const map = new google.maps.Map(document.getElementById("map"), {
-                            zoom: zoomIn? 18 : 7,
+                            zoom: zoomIn ? 18 : 7,
                             center: home,
                         });
                         // The marker, positioned at Uluru
@@ -187,8 +247,8 @@
                             });
 
                         }
-                      
-                  
+
+
                         console.log(cinemas);
 
                     })
@@ -199,7 +259,7 @@
                 dynamicSearch: function () {
 
                     let self = this;
-                    
+
                     console.log(self.$refs.search_movie.value)
 
                     let search = self.$refs.search_movie.value;
@@ -256,20 +316,20 @@
 
                     })
 
-                    
+
 
 
 
                 },
 
-                
+
 
 
 
                 bookShow: function (e) {
 
                     e.preventDefault();
-                   
+
 
                     let self = this;
                     let showId = self.currentShow;
@@ -277,7 +337,7 @@
                     let newBooking = {
 
                         bookingDate: new Date(),
-                        showId: parseInt(showId) ,
+                        showId: parseInt(showId),
                         userName: self.$refs.username.value,
                         userEmail: self.$refs.useremail.value,
                         userPhone: self.$refs.phone.value
@@ -363,6 +423,14 @@
 
 
 
+                },
+
+                stripeSubmit: function (e) {
+
+                    e.preventDefault();
+                    console.log(e);
+                   // console.log($(".stripecheckout").show())
+                    console.log($(".stripecheckout").find(".stripe-button-el").click())
                 }
 
 
@@ -373,6 +441,7 @@
         });
 
 
+        
 
 
 
@@ -413,59 +482,60 @@
 
 
 
-                //$(document).ready(function () {
+
+                    //$(document).ready(function () {
 
 
-                //    console.log("hey");
-                //    $.ajax({
-
-
-
-                //        url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
-                //        dataType: "json",
-                //        contentType: "application/json",
-                //        method: "GET",
-                //        timeout: 0,
-                //       // headers: {
-                //       //     api-version: "v200",
-                //       //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
-                //       //     client: "ABCD",
-                //       //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
-                //       //     device-datetime: "2020-06-18T12:07:57.296Z",
-                //       //     territory: "XX"
-                //       //}
-                //        headers: {
-
-                //            "api-version": "v200",
-                //            "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
-                //            "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
-                //            "territory": "XX",
-                //            "api-version": "v200",
-                //            "device-datetime": "2021-08-02T00:02:15.017Z",
-                //            "client": "GRAD_0",
-                //            "geolocation": "39.142089359523084, -84.51447294615582"
+                    //    console.log("hey");
+                    //    $.ajax({
 
 
 
+                    //        url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
+                    //        dataType: "json",
+                    //        contentType: "application/json",
+                    //        method: "GET",
+                    //        timeout: 0,
+                    //       // headers: {
+                    //       //     api-version: "v200",
+                    //       //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
+                    //       //     client: "ABCD",
+                    //       //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
+                    //       //     device-datetime: "2020-06-18T12:07:57.296Z",
+                    //       //     territory: "XX"
+                    //       //}
+                    //        headers: {
+
+                    //            "api-version": "v200",
+                    //            "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
+                    //            "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
+                    //            "territory": "XX",
+                    //            "api-version": "v200",
+                    //            "device-datetime": "2021-08-02T00:02:15.017Z",
+                    //            "client": "GRAD_0",
+                    //            "geolocation": "39.142089359523084, -84.51447294615582"
 
 
-                //        }
-
-
-                //    }).done(function (res) {
-                //        console.log(res);
-
-
-                //    }).fail(function (res) {
-
-                //        console.log(res);
 
 
 
-                //    })
+                    //        }
 
 
-                //})
+                    //    }).done(function (res) {
+                    //        console.log(res);
+
+
+                    //    }).fail(function (res) {
+
+                    //        console.log(res);
+
+
+
+                    //    })
+
+
+                    //})
 
 
     </script>

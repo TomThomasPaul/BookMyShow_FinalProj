@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Adv_WebDev_FinalProj.Data;
 using Gtt.Uc.EntityFramework;
+using Stripe;
 
 namespace Adv_WebDev_FinalProj
 {
@@ -37,6 +38,8 @@ namespace Adv_WebDev_FinalProj
             }));
             services.AddMvc();
 
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+
             /*services.AddDbContext<Adv_WebDev_FinalProjContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Adv_WebDev_FinalProjContext")));*/
             services.AddGttMem<Adv_WebDev_FinalProjContext>("857de72e-1e01-430a-8af2-a29879698538");
@@ -45,6 +48,9 @@ namespace Adv_WebDev_FinalProj
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

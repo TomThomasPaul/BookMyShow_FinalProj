@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Adv_WebDev_FinalProj.Data;
 using Adv_WebDev_FinalProj.Models;
+using Stripe;
 
 namespace Adv_WebDev_FinalProj.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookingsController : ControllerBase
+    public class BookingsController : Controller
     {
         private readonly Adv_WebDev_FinalProjContext _context;
 
@@ -84,6 +85,27 @@ namespace Adv_WebDev_FinalProj.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBooking", new { id = booking.BookingId }, booking);
+        }
+
+
+        [HttpPost("charge")]
+        public  IActionResult Charge(string stripeEmail, string stripeToken)
+        {
+            var customerService = new Stripe.CustomerService();
+            var chargeService = new Stripe.ChargeService();
+
+            var customer = customerService.Create(new CustomerCreateOptions { Email = stripeEmail, Source = stripeToken });
+            //var charge = chargeService.Create(new ChargeCreateOptions
+            //{
+
+            //    Amount = 500,
+            //    Description = "This is the movie ticket cost",
+            //    Currency = "USD",
+            //    Customer = customer.Id
+
+            // });
+
+            return Ok();
         }
 
         // DELETE: api/Bookings/5
