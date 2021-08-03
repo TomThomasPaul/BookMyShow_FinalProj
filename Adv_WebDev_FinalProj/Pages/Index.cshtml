@@ -30,20 +30,49 @@
             <div class="cinema_list">
                 <div v-for="cinema in cinemas">
 
-                    <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true" >
+                    <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true">
                         <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio">
                         <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
                             {{cinema.cinemaName}}
                         </label>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
         <div class="col" v-show="ui.showShow">
             <h6 class="display-4 text-center">Shows</h6>
-            <button id="btn-book" class="btn btn-primary align-content-center" v-on:click="bookShow">Book Show</button>
+            <div class="d-flex flex-row bd-highlight mb-3">
+                <div v-for="show in shows">
+                    <button type="button" class="btn btn-warning" :id="'show-'+ show.showId" v-on:click="{{ui.showBookingForm=true;currentShow=show.showId}}">{{show.showDate}}</button>
+                    <span>{{show.seatsAvailable}}</span>
+                </div>
+            </div>
+          
+            
+            <div v-show="ui.showBookingForm">
+                {{"booking form"}}
+                <form>
+                    <div class="form-group">
+                        <label for="username">User Name</label>
+                        <input type="text" class="form-control" id="username" ref="username" placeholder="User Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-muted">Enter you email</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
+                    </div>
+
+                    <button id="btn-book" class="btn btn-primary align-content-center" v-on:click="bookShow">Book Show</button>
+                </form>
+
+            </div>
         </div>
+        
     </div>
 
 
@@ -73,6 +102,8 @@
                 message: "Hello World!",
                 movies: [],
                 cinemas: [],
+                shows: [],
+                currentShow: null,
                 currentLocation: {
                     latitude: "",
                     longitude: ""
@@ -81,7 +112,8 @@
                 ui: {
                     showCinema: false,
                     showShow: false,
-                    showCinemaShow: false
+                    showCinemaShow: false,
+                    showBookingForm: false
                 }
             },
             mounted: function () {
@@ -200,7 +232,7 @@
 
                     let self = this;
                     self.cinemas = [];
-                    console.log("hey getshows");
+                    console.log("hey getcinemas");
                     let movieId = e.target.parentNode.getAttribute("id");
 
                     movieId && $.ajax({
@@ -237,15 +269,18 @@
                 bookShow: function (e) {
 
                     e.preventDefault();
+                   
 
                     let self = this;
+                    let showId = self.currentShow;
+                    console.log(showId);
                     let newBooking = {
 
                         bookingDate: new Date(),
-                        showId: 1,
-                        userName: "Pratibha",
-                        userEmail: "pt@gmail.com",
-                        userPhone: "5134256378"
+                        showId: parseInt(showId) ,
+                        userName: self.$refs.username.value,
+                        userEmail: self.$refs.useremail.value,
+                        userPhone: self.$refs.phone.value
 
 
 
@@ -297,7 +332,34 @@
 
                     let self = this;
                     let cinemaCoords = e.target.getAttribute("value");
-                    self.initMap(cinemaCoords.split(","),true);
+                    self.initMap(cinemaCoords.split(","), true);
+
+                    self.shows = [];
+                    console.log("hey getshows");
+                    let cinemaId = e.target.parentNode.getAttribute("id");
+                    console.log(cinemaId);
+
+                    cinemaId && $.ajax({
+                        url: "/api/shows/?search=" + cinemaId.split("-")[1],
+                        dataType: "json",
+                        contentType: "application/json",
+                        method: "GET",
+
+                    }).done(function (shows) {
+                        console.log(shows);
+                        self.shows = shows;
+                        console.log(self.shows);
+
+
+
+
+                    }).fail(function (err) {
+
+                        console.log(err);
+
+
+                    })
+
 
 
 

@@ -23,9 +23,18 @@ namespace Adv_WebDev_FinalProj.Controllers
 
         // GET: api/Shows
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Show>>> GetShow()
+        public async Task<ActionResult<IEnumerable<Show>>> GetShow(string search)
         {
-            return await _context.Show.ToListAsync();
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                //return Ok(search);
+                return await _context.Show.ToListAsync();
+
+            }
+
+            var shows = await _context.Show.Where(show => show.CinemaId == int.Parse(search)).ToListAsync();
+            return shows;
+            
         }
 
         // GET: api/Shows/5
