@@ -23,9 +23,17 @@ namespace Adv_WebDev_FinalProj.Controllers
 
         // GET: api/Cinemas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cinema>>> GetCinema()
+        public async Task<ActionResult<IEnumerable<Cinema>>> GetCinema(string search)
         {
-            return await _context.Cinema.ToListAsync();
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                //return Ok(search);
+                return await _context.Cinema.ToListAsync();
+
+            }
+            var cinemas = await _context.Cinema.Where(cinema => cinema.MovieId == int.Parse(search)).ToListAsync();
+            return cinemas;
         }
 
         // GET: api/Cinemas/5

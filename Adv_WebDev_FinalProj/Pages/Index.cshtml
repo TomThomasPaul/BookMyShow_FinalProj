@@ -21,8 +21,31 @@
 
     </form>
     <div class="movie_list">
-        {{movies}}
+        <div v-for="movie in movies">
+            {{/*movies*/}}
+            <div class="movie-container" :id="'movie-' + movie.movieId">
+                <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas">
+                @*<h2>{{movie.title}}</h2>*@
+            </div>
+
+
+        </div>
     </div>
+
+    <div class="cinema_list">
+        <div v-for="cinema in cinemas">
+
+            <div class="form-check" :id="'cinema-' + cinema.cinemaId">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    {{cinema.cinemaName}}
+                </label>
+            </div>
+
+
+        </div>
+    </div>
+
 
     @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
     <div id="map" style="height:400px;width:100%"></div>
@@ -46,6 +69,7 @@
                 // PLACE DATA PROPERTIES HERE
                 message: "Hello World!",
                 movies: [],
+                cinemas:[],
                 currentLocation: {
                     latitude: "",
                     longitude: ""
@@ -61,7 +85,7 @@
                 navigator.geolocation.getCurrentPosition(function (location) {
                     self.currentLocation.latitude = location.coords.latitude
                     self.currentLocation.longitude = location.coords.longitude;
-                    console.log(self.currentLocation);
+                    //console.log(self.currentLocation);
 
 
 
@@ -83,22 +107,43 @@
             },
             methods: {
 
-                
+
                 initMap: function initMap() {
                     // The location of Uluru
                     let self = this;
-                    console.log(self.currentLocation.latitude);
-                    const home = { lat: -25.344 , lng: 131.036  };
-                    // The map, centered at Uluru
-                    const map = new google.maps.Map(document.getElementById("map"), {
-                        zoom: 4,
-                        center: home,
-                    });
-                    // The marker, positioned at Uluru
-                    const marker = new google.maps.Marker({
-                        position: home,
-                        map: map,
-                    });
+                    console.log("this is inside initmap");
+                    navigator.geolocation.getCurrentPosition(function (location) {
+                        self.currentLocation.latitude = location.coords.latitude
+                        self.currentLocation.longitude = location.coords.longitude;
+                        //console.log(self.currentLocation);
+                        console.log(self.currentLocation.latitude);
+                        const home = { lat: self.currentLocation.latitude, lng: self.currentLocation.longitude };
+                        const kentucky = { lat: 37.839333, lng: -84.270020 };
+                        const columbus = { lat: 39.9612, lng: -82.9988 };
+                        // The map, centered at Uluru
+                        const map = new google.maps.Map(document.getElementById("map"), {
+                            zoom: 7,
+                            center: home,
+                        });
+                        // The marker, positioned at Uluru
+                        const marker1 = new google.maps.Marker({
+                            position: home,
+                            map: map,
+                        });
+
+                        const marker2 = new google.maps.Marker({
+                            position: kentucky,
+                            map: map,
+                        });
+
+                        const marker3 = new google.maps.Marker({
+                            position: columbus,
+                            map: map,
+                        });
+
+
+                    })
+
                 },
                 // ADD ANY METHODS (CLICK, SUBMIT EVENTS, ETC.)
 
@@ -120,8 +165,23 @@
                         console.log(movies);
                         self.movies = movies;
 
+                        //if (movies && movies.length > 0) {
+                        //    movies.forEach(movie => {
+                        //        console.log(movie);
+                        //        console.log($("#app").find(".movie-list"));
+                        //        $("#app").find(".movie-list").append(`<div class="movie-container">
+                        //                                     <img alt="Movie Image" src="${movie.image}">
+                        //                                      <h2>${movie.title}</h2>
+                        //                                </div>`)
 
-                       
+
+                        //    })
+
+
+                        //}
+
+
+
 
 
                     }).fail(function (err) {
@@ -132,6 +192,56 @@
                     })
 
 
+
+
+
+                },
+
+                getCinemas: function (e) {
+
+                    let self = this;
+                    self.cinemas = [];
+                    console.log("hey getshows");
+                    let movieId = e.target.parentNode.getAttribute("id");
+
+                    movieId && $.ajax({
+                        url: "/api/cinemas/?search=" + movieId.split("-")[1],
+                        dataType: "json",
+                        contentType: "application/json",
+                        method: "GET",
+
+                    }).done(function (cinemas) {
+                        console.log(cinemas);
+                        self.cinemas = cinemas;
+                        console.log(self.cinemas);
+
+                        //if (movies && movies.length > 0) {
+                        //    movies.forEach(movie => {
+                        //        console.log(movie);
+                        //        console.log($("#app").find(".movie-list"));
+                        //        $("#app").find(".movie-list").append(`<div class="movie-container">
+                        //                                     <img alt="Movie Image" src="${movie.image}">
+                        //                                      <h2>${movie.title}</h2>
+                        //                                </div>`)
+
+
+                        //    })
+
+
+                        //}
+
+
+
+
+
+                    }).fail(function (err) {
+
+                        console.log(err);
+
+
+                    })
+
+                    
 
 
 

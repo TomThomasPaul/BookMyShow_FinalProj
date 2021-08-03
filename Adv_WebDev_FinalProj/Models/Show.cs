@@ -8,6 +8,7 @@ namespace Adv_WebDev_FinalProj.Models
     public class Show
     {
         public int ShowId { get; set; }
+        public int SeatsAvailable { get; set; }
         public DateTime ShowDate { get; set; }
         public Movie Movie { get; set; }
         public Cinema Cinema { get; set; }
