@@ -5,21 +5,11 @@
 @{
     ViewData["Title"] = "Home page";
 }
-@*<form action="/api/bookings/charge" method="POST">
-        <label>Amount: 500$</label>
-        <script src="//checkout.stripe.com/v2/checkout.js"
-                class="stripe-button"
-                data-key="@Stripe.Value.PublishableKey"
-                data-description="This is the cost of movie ticket"
-                data-amount="500">
-        </script>
 
-
-    </form>*@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
-<head>
+  <head>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <!--Bootstrap core CSS -->
@@ -30,8 +20,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet" />
     <link href='https://fonts.googleapis.com/css?family=Manjari' rel='stylesheet' />
-</head>
-<body>
+  </head>
+  <body>
     <div id="app">
         <div v-show="ui.showCarousel">
             <main role="main">
@@ -57,7 +47,7 @@
                                 <div class="carousel-caption">
                                     <h2>Local. Authentic. Easy.</h2>
                                     <p class="font-weight-bolder">Find cinemas in your desired location. We enlist local and most popular cinemas to help you choose from the best.</p>
-   
+
                                 </div>
                             </div>
                         </div>
@@ -85,25 +75,19 @@
             </main>
         </div>
 
-
-
-
-
         <form>
             <div class="form-group form-floating">
                 <label for="search_movie"></label>
-                <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies...">
+                <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies..." />
             </div>
-            @*<button type="submit" class="btn btn-primary">Search</button>*@
-
-
         </form>
+
         <div class="movie_list">
             <div v-for="movie in movies">
-                {{/*movies*/}}
                 <div class="movie-container" :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true;ui.showShow=false">
+
                     <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
-                    @*<h2>{{movie.title}}</h2>*@
+
                 </div>
             </div>
         </div>
@@ -114,7 +98,7 @@
                     <div v-for="cinema in cinemas">
 
                         <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio" />
                             <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
                                 {{cinema.cinemaName}}
                             </label>
@@ -127,17 +111,12 @@
                 <h6 class="display-4 ">Shows</h6>
                 <div class="d-flex flex-row bd-highlight mt-4">
                     <div v-for="show in shows">
-                        <!--<div class="row">
-                            <p>{{show.showDate}}</p>
-                            <button type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<10, 'btn-warning' : show.seatsAvailable<20, 'btn-primary': show.seatsAvailable>30} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
-                            <p></p>
-                        </div>-->
                         <div class="text-center d-flex justify-content-center">
                             <ol class="list-group list-group-numbered text-center d-flex justify-content-center">
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
-                                        <div class="fw-bold p-2">{{show.showDate.split("T")[0] + " " + show.showDate.split("T")[1] }}</div>
-                                        <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<=10, 'btn-warning' : (show.seatsAvailable>10 && show.seatsAvailable<=20) , 'btn-primary': show.seatsAvailable>20} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
+                                        <div class="fw-bold p-2">{{show.showDate.split("T")[0] + " " + show.showDate.split("T")[1].substring(0,5) }}</div>
+                                        <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<=10, 'btn-warning' : (show.seatsAvailable>10 && show.seatsAvailable<=20) , 'btn-success': show.seatsAvailable>20} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
                                     </div>
 
                                 </li>
@@ -164,27 +143,26 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="username">User Name</label>
-                                            <input type="text" class="form-control" id="username" ref="username" placeholder="User Name">
+                                            <input type="text" class="form-control" id="username" ref="username" placeholder="User Name" />
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email">
+                                            <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email" />
                                             <small id="emailHelp" class="form-text text-muted">Enter you email</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
-                                            <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
+                                            <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone" />
                                         </div>
 
 
                                     </form>
                                     <form action="/api/bookings/charge" method="post" v-on:click="stripeSubmit">
-                                        @*<label>amount: 500$</label>*@
                                         <script src="//checkout.stripe.com/v2/checkout.js"
                                                 class="stripe-button"
                                                 data-key="@Stripe.Value.PublishableKey"
                                                 data-description="this is the cost of movie ticket"
-                                                data-amount="50000">
+                                                data-amount="1000">
                                         </script>
                                     </form>
                                 </div>
@@ -196,55 +174,7 @@
                         </div>
                     </div>
 
-
-                    <!--<form>
-        <div class="form-group">
-            <label for="username">User Name</label>
-            <input type="text" class="form-control" id="username" ref="username" placeholder="User Name">
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">Enter you email</small>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
-        </div>
-
-
-    </form><form>
-        <div class="form-group">
-            <label for="username">User Name</label>
-            <input type="text" class="form-control" id="username" ref="username" placeholder="User Name">
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">Enter you email</small>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
-        </div>
-
-
-    </form>
-
-    <form action="/api/bookings/charge" method="post" v-on:click="stripeSubmit">
-        @*<label>amount: 500$</label>*@
-        <script src="//checkout.stripe.com/v2/checkout.js"
-                class="stripe-button"
-                data-key="@Stripe.Value.PublishableKey"
-                data-description="this is the cost of movie ticket"
-                data-amount="50000">
-        </script>
-    </form>-->
-
-
                 </div>
-
-
 
             </div>
 
@@ -261,7 +191,6 @@
     </div>
 
     <div class="stripecheckout">
-        @*<form action="/api/bookings/charge" method="post" class="stripeForm">*@
         <label>amount: 500$</label>
         <script src="//checkout.stripe.com/v2/checkout.js"
                 class="stripe-button"
@@ -269,17 +198,13 @@
                 data-description="Make Payment"
                 data-amount="1000">
         </script>
-
-
-        @*</form>*@
-
     </div>
 
-</body>
-
+  </body>
+</html>
 @section scripts
 {
-    @*<script src="//checkout.stripe.com/v2/checkout.js"></script>*@
+
 
     <script>
 
@@ -318,57 +243,35 @@
                 navigator.geolocation.getCurrentPosition(function (location) {
                     self.currentLocation.latitude = location.coords.latitude
                     self.currentLocation.longitude = location.coords.longitude;
-                    //console.log(self.currentLocation);
-                    console.log(self);
-
 
                 })
 
-                //self.buildMap(self.currentLocation.latitude, self.currentLocation.longitude);
-                //self.initMap();
-
-
-                //$("#search_movie").keyup(function () {
                 let externalScript = document.createElement('script')
                 externalScript.setAttribute('src', 'https://checkout.stripe.com/v2/checkout.js')
-                //$(".stripecheckout").append(externalScript);
-                console.log($(".stripecheckout").hide())
-                //$(".stripeForm").submit(function (e) {
-
-                //    e.preventDefault();
-                //})
-
-
-
-
-                //})
-
+                $(".stripecheckout").hide();
 
             },
             methods: {
 
 
                 initMap: function initMap(cinemas, zoomIn = false) {
-                    // The location of 3 markers
+
                     let self = this;
                     console.log("this is inside initmap");
                     navigator.geolocation.getCurrentPosition(function (location) {
                         self.currentLocation.latitude = location.coords.latitude
                         self.currentLocation.longitude = location.coords.longitude;
-                        //console.log(self.currentLocation);
-                        //console.log(self.currentLocation.latitude);
+
                         let home = { lat: self.currentLocation.latitude, lng: self.currentLocation.longitude };
                         if (zoomIn) {
                             home = { lat: parseFloat(cinemas[0]), lng: parseFloat(cinemas[1]) };
                         }
-                        //const kentucky = { lat: 37.839333, lng: -84.270020 };
-                        //const columbus = { lat: 39.9612, lng: -82.9988 };
-                        // The map, centered at Uluru
+
                         const map = new google.maps.Map(document.getElementById("map"), {
                             zoom: zoomIn ? 18 : 7,
                             center: home,
                         });
-                        // The marker, positioned at Uluru
+
                         if (!zoomIn) {
                             cinemas.forEach(cinema => {
                                 let cinemaCoordinates = { lat: parseFloat(cinema.latitude), lng: parseFloat(cinema.longitude) };
@@ -387,9 +290,6 @@
                             });
 
                         }
-
-
-                        console.log(cinemas);
 
                     })
 
@@ -463,14 +363,7 @@
 
                 },
 
-
-
-
-
                 bookShow: function (e) {
-
-                    // e.preventDefault();
-
 
                     let self = this;
                     let showId = self.currentShow;
@@ -483,10 +376,6 @@
                         userEmail: self.$refs.useremail.value,
                         userPhone: self.$refs.phone.value
 
-
-
-
-
                     };
 
                     $.ajax({
@@ -496,33 +385,12 @@
                         data: JSON.stringify(newBooking),
                         method: "POST"
 
-
-
-
                     }).done(function (booking) {
                         console.log(booking);
-
-                        //$(".listings-display").append(`<tr id="listing-${listing.id}"">
-                        //         <th scope="row">${listing.listingname}</th>
-                        //         <td>${listing.listingprice}</td>
-                        //         <td class="checkbox"><input type="checkbox" checked="checked" id="availability-${listing.id}" disabled="true"/></td>
-                        //         <td>${listing.posteddate}</td>
-                        //         <td>${listing.areasqft}</td>
-                        //         <td><td><button id="btn-delete-${listing.id}" class="btn btn-danger">Delete Listing</button>  <button id="btn-update-${listing.id}" class="btn btn-warning">Edit</button></td></td>
-                        //         </tr>`)
-
-                        //alert(` A new booking for user ${booking.userName} has been created`);
-
-
-
-
-
 
                     }).fail(function (error) {
                         alert(`error while creating a booking: ${JSON.stringify(error.responseJSON.errors)}`);
                         console.log(error);
-
-
 
                     })
 
@@ -551,9 +419,6 @@
                         self.shows = shows;
                         console.log(self.shows);
 
-
-
-
                     }).fail(function (err) {
 
                         console.log(err);
@@ -561,25 +426,18 @@
 
                     })
 
-
-
-
                 },
 
                 stripeSubmit: function (e) {
+
                     let self = this;
 
                     e.preventDefault();
-                    console.log(e);
-                    // console.log($(".stripecheckout").show())
-                    //$(".stripecheckout").find(".stripeForm").submit(function (e) {
 
-                    //    e.preventDefault();
-                    //    console.log("this is pay");
-                    //})
                     $(".stripecheckout").find(".stripe-button-el").click();
                     $(".modal-backdrop").remove();
                     self.bookShow();
+
                     let currentShow = self.currentShow;
                     let updatedShow = null;
                     self.ui.showBookingForm = false;
@@ -601,10 +459,6 @@
 
                     }).done(function (res) {
                         console.log(res);
-
-
-
-
 
                     }).fail(function (err) {
 
@@ -669,59 +523,59 @@
 
 
 
-                        //$(document).ready(function () {
+                            //$(document).ready(function () {
 
 
-                        //    console.log("hey");
-                        //    $.ajax({
-
-
-
-                        //        url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
-                        //        dataType: "json",
-                        //        contentType: "application/json",
-                        //        method: "GET",
-                        //        timeout: 0,
-                        //       // headers: {
-                        //       //     api-version: "v200",
-                        //       //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
-                        //       //     client: "ABCD",
-                        //       //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
-                        //       //     device-datetime: "2020-06-18T12:07:57.296Z",
-                        //       //     territory: "XX"
-                        //       //}
-                        //        headers: {
-
-                        //            "api-version": "v200",
-                        //            "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
-                        //            "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
-                        //            "territory": "XX",
-                        //            "api-version": "v200",
-                        //            "device-datetime": "2021-08-02T00:02:15.017Z",
-                        //            "client": "GRAD_0",
-                        //            "geolocation": "39.142089359523084, -84.51447294615582"
+                            //    console.log("hey");
+                            //    $.ajax({
 
 
 
+                            //        url: "https://api-gate2.movieglu.com/filmsNowShowing/?n=10",
+                            //        dataType: "json",
+                            //        contentType: "application/json",
+                            //        method: "GET",
+                            //        timeout: 0,
+                            //       // headers: {
+                            //       //     api-version: "v200",
+                            //       //     Authorization: "Basic A1B2c3D4E5f6H7I8j911M12=",
+                            //       //     client: "ABCD",
+                            //       //     x-api-key: "IyrBUDT7CuTTc6LH45mI5aAoG8",
+                            //       //     device-datetime: "2020-06-18T12:07:57.296Z",
+                            //       //     territory: "XX"
+                            //       //}
+                            //        headers: {
+
+                            //            "api-version": "v200",
+                            //            "authorization": "Basic R1JBRF8wX1hYOkF2MHlRMGJQeENYZg==",
+                            //            "x-api-key": "tiq22LUYkK7aV7NM6UEzP1hSPHabGhyS35koirsQ",
+                            //            "territory": "XX",
+                            //            "api-version": "v200",
+                            //            "device-datetime": "2021-08-02T00:02:15.017Z",
+                            //            "client": "GRAD_0",
+                            //            "geolocation": "39.142089359523084, -84.51447294615582"
 
 
-                        //        }
-
-
-                        //    }).done(function (res) {
-                        //        console.log(res);
-
-
-                        //    }).fail(function (res) {
-
-                        //        console.log(res);
 
 
 
-                        //    })
+                            //        }
 
 
-                        //})
+                            //    }).done(function (res) {
+                            //        console.log(res);
+
+
+                            //    }).fail(function (res) {
+
+                            //        console.log(res);
+
+
+
+                            //    })
+
+
+                            //})
 
 
     </script>
@@ -730,3 +584,4 @@
 
 
 }
+</html>
