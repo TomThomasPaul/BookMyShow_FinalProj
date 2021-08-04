@@ -137,7 +137,7 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
                                         <div class="fw-bold">{{show.showDate}}</div>
-                                        <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<10, 'btn-warning' : show.seatsAvailable<20, 'btn-primary': show.seatsAvailable<60} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
+                                        <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<=10, 'btn-warning' : (show.seatsAvailable>10 && show.seatsAvailable<=20) , 'btn-primary': show.seatsAvailable>20} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
                                     </div>
 
                                 </li>
