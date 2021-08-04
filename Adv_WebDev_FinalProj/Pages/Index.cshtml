@@ -436,6 +436,8 @@
 
                     $(".stripecheckout").find(".stripe-button-el").click();
                     $(".modal-backdrop").remove();
+                    $("body").removeClass("modal-open");
+                    $("body").removeAttr("style");
                     self.bookShow();
 
                     let currentShow = self.currentShow;
