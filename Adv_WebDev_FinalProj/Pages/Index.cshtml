@@ -125,7 +125,7 @@
             </div>
             <div class="col align-content-center" v-show="ui.showShow">
                 <h6 class="display-4 ">Shows</h6>
-                <div class="d-flex flex-row bd-highlight mb-3">
+                <div class="d-flex flex-row bd-highlight mt-4">
                     <div v-for="show in shows">
                         <!--<div class="row">
                             <p>{{show.showDate}}</p>
@@ -136,7 +136,7 @@
                             <ol class="list-group list-group-numbered text-center d-flex justify-content-center">
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
-                                        <div class="fw-bold">{{show.showDate}}</div>
+                                        <div class="fw-bold p-2">{{show.showDate.split("T")[0] + " " + show.showDate.split("T")[1] }}</div>
                                         <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<=10, 'btn-warning' : (show.seatsAvailable>10 && show.seatsAvailable<=20) , 'btn-primary': show.seatsAvailable>20} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
                                     </div>
 
@@ -578,6 +578,7 @@
                     //    console.log("this is pay");
                     //})
                     $(".stripecheckout").find(".stripe-button-el").click();
+                    $(".modal-backdrop").remove();
                     self.bookShow();
                     let currentShow = self.currentShow;
                     let updatedShow = null;
