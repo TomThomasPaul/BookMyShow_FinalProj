@@ -105,7 +105,7 @@ namespace Adv_WebDev_FinalProj.Controllers
 
             // });
 
-            return Ok();
+            return Redirect("/bookings");
         }
 
         // DELETE: api/Bookings/5

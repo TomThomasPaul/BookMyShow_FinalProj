@@ -20,14 +20,14 @@
 
 
     <div id="app">
-        @*<strong>{{ message }}</strong>*@
+
         <form>
             <div class="form-group form-floating">
                 <label for="search_movie"></label>
                 <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies...">
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-            <!--<button id="btn-book" class="btn btn-primary" v-on:click="bookShow">Book Show</button>-->
+            @*<button type="submit" class="btn btn-primary">Search</button>*@
+          
 
         </form>
         <div class="movie_list">
@@ -59,14 +59,14 @@
                 <h6 class="display-4 text-center">Shows</h6>
                 <div class="d-flex flex-row bd-highlight mb-3">
                     <div v-for="show in shows">
-                        <button type="button" class="btn btn-warning" :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.showDate}}</button>
-                        <span>{{show.seatsAvailable}}</span>
+                        <button type="button"  :class=" {'btn':true,'btn-danger': show.seatsAvailable<10, 'btn-warning' : show.seatsAvailable<20, 'btn-primary': show.seatsAvailable>30} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.showDate}}</button>
+                        <p>{{show.seatsAvailable + " seats left"}}</p>
                     </div>
                 </div>
 
 
                 <div v-show="ui.showBookingForm">
-                    {{"booking form"}}
+                    
                     <form>
                         <div class="form-group">
                             <label for="username">User Name</label>
@@ -82,16 +82,16 @@
                             <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone">
                         </div>
 
-                        <button id="btn-book" class="btn btn-primary align-content-center" v-on:click="bookShow">Book Show</button>
+               
                     </form>
 
                     <form action="/api/bookings/charge" method="post" v-on:click="stripeSubmit">
-                        <label>amount: 500$</label>
+                        @*<label>amount: 500$</label>*@
                         <script src="//checkout.stripe.com/v2/checkout.js"
                                 class="stripe-button"
                                 data-key="@Stripe.Value.PublishableKey"
                                 data-description="this is the cost of movie ticket"
-                                data-amount="500">
+                                data-amount="50000">
                         </script>
 
 
@@ -108,31 +108,26 @@
 
 
         <div v-show="ui.showCinema">
-            @*<img class="card-img-top" id="map" src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="Card image cap">*@
-            <div id="map" style="height:400px;width:100%"></div>
-            <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+            
+             <div id="map" style="height:400px;width:100%"></div>
+            
         </div>
-
-        
-        @*<iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-c456b1a6ebc647ce3961b938c679c5e5.html?distinct_id=3b5850e5-4ae0-6dbd-35c4-ed34a99d11e5" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: block; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe>*@
-        @*<iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-c456b1a6ebc647ce3961b938c679c5e5.html?distinct_id=0f90404e-a6bc-dec5-fa6a-859b4bc8f7ca" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: block; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe>*@
-    
 
 
     </div>
 
     <div class="stripecheckout"  >
-            <form action="/api/movies" method="post" class="stripeForm">
+            @*<form action="/api/bookings/charge" method="post" class="stripeForm">*@
                 <label>amount: 500$</label>
                 <script  src="//checkout.stripe.com/v2/checkout.js"
                         class="stripe-button"
                         data-key="@Stripe.Value.PublishableKey"
-                        data-description="this is the cost of movie ticket"
-                        data-amount="500" >
+                        data-description="Make Payment"
+                        data-amount="1000" >
                 </script>
 
 
-            </form>
+            @*</form>*@
 
     </div>
 
@@ -144,7 +139,7 @@
             
     <script>
 
-
+       
 
 
         var app = new Vue({
@@ -328,7 +323,7 @@
 
                 bookShow: function (e) {
 
-                    e.preventDefault();
+                   // e.preventDefault();
 
 
                     let self = this;
@@ -370,7 +365,7 @@
                         //         <td><td><button id="btn-delete-${listing.id}" class="btn btn-danger">Delete Listing</button>  <button id="btn-update-${listing.id}" class="btn btn-warning">Edit</button></td></td>
                         //         </tr>`)
 
-                        alert(` A new booking for user ${booking.userName} has been created`);
+                        //alert(` A new booking for user ${booking.userName} has been created`);
 
 
 
@@ -426,11 +421,51 @@
                 },
 
                 stripeSubmit: function (e) {
+                    let self = this;
 
                     e.preventDefault();
                     console.log(e);
                    // console.log($(".stripecheckout").show())
-                    console.log($(".stripecheckout").find(".stripe-button-el").click())
+                    //$(".stripecheckout").find(".stripeForm").submit(function (e) {
+
+                    //    e.preventDefault();
+                    //    console.log("this is pay");
+                    //})
+                    $(".stripecheckout").find(".stripe-button-el").click();
+                    self.bookShow();
+                    let currentShow = self.currentShow;
+                    let updatedShow = null;
+                    self.ui.showBookingForm = false;
+                    self.shows.forEach(show => {
+
+                        if (show.showId == currentShow) {
+                            show.seatsAvailable -= 1;
+                            updatedShow = show;
+                        }
+
+                    })
+
+                    currentShow && $.ajax({
+                        url: `/api/shows/${currentShow}`,
+                        dataType: "json",
+                        data: JSON.stringify(updatedShow),
+                        contentType: "application/json",
+                        method: "PUT",
+
+                    }).done(function (res) {
+                        console.log(res);
+                       
+
+
+
+
+                    }).fail(function (err) {
+
+                        console.log(err);
+
+
+                    })
+
                 }
 
 
