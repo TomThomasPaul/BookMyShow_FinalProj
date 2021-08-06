@@ -22,183 +22,221 @@
     <link href='https://fonts.googleapis.com/css?family=Manjari' rel='stylesheet' />
   </head>
   <body>
-    <div id="app">
-        <div v-show="ui.showCarousel">
-            <main role="main">
-                <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarouse1" data-slide-to="1"></li>
-                        <li data-target="#myCarouse1" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img class="first-slide" src="~/img/red_cinema.jfif" alt="Red Cinema" />
-                            <div class="container">
-                                <div class="carousel-caption text-xl-center align-text-top">
-                                    <h1>Book My Show</h1>
-                                    <h6 class="font-weight-bolder text-xl-center">Find Shows Of Your Favorite Movies Near You</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="second-slide" src="~/img/pop_coke_hori.jpg" alt="Second slide" />
-                            <div class="container">
-                                <div class="carousel-caption">
-                                    <h2>Local. Authentic. Easy.</h2>
-                                    <p class="font-weight-bolder">Find cinemas in your desired location. We enlist local and most popular cinemas to help you choose from the best.</p>
+      
+      <div id="app">
+          @if (Model.IsMobile)
+          {
+              <div class="card bg-dark text-white">
+                  <img src=~/img/red_cinema.jfif class="card-img" alt="..." />
+                  <div class="card-img-overlay">
+                      <h5 class="card-title">Book My Show - Mobile</h5>
+                      <p class="card-text">Find Shows Of Your Favorite Movies Near You</p>
+                      <p class="card-text">Search Now!!</p>
+                  </div>
+              </div>
+          }
+          else
+          {
+              <div v-show="ui.showCarousel">
+                  <main role="main">
+                      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                          <ol class="carousel-indicators">
+                              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                              <li data-target="#myCarouse1" data-slide-to="1"></li>
+                              <li data-target="#myCarouse1" data-slide-to="2"></li>
+                          </ol>
+                          <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                  <img class="first-slide" src="~/img/red_cinema.jfif" alt="Red Cinema" />
+                                  <div class="container">
+                                      <div class="carousel-caption text-xl-center align-text-top">
+                                          <h1>Book My Show</h1>
+                                          <h6 class="font-weight-bolder text-xl-center">Find Shows Of Your Favorite Movies Near You</h6>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="carousel-item">
+                                  <img class="second-slide" src="~/img/pop_coke_hori.jpg" alt="Second slide" />
+                                  <div class="container">
+                                      <div class="carousel-caption">
+                                          <h2>Local. Authentic. Easy.</h2>
+                                          <p class="font-weight-bolder">Find cinemas in your desired location. We enlist local and most popular cinemas to help you choose from the best.</p>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="third-slide" src="~/img/people.jpg" alt="Third slide" />
-                            <div class="container">
-                                <div class="carousel-caption text-left">
-                                    <h2>We are here to HELP.</h2>
-                                    <p class="text-light font-weight-bolder">Given the COVID-19 outbreak we urge you to stay tuned for the updated guidelines </p><p class="text-light font-weight-bolder">to make informed decisions regarding your travel.</p>
-                                    <p><a class="btn btn-lg btn-primary" href="https://www.cinemasafe.org/" target="_blank" role="button">See Guidelines</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="carousel-item">
+                                  <img class="third-slide" src="~/img/people.jpg" alt="Third slide" />
+                                  <div class="container">
+                                      <div class="carousel-caption text-left">
+                                          <h2>We are here to HELP.</h2>
+                                          <p class="text-light font-weight-bolder">Given the COVID-19 outbreak we urge you to stay tuned for the updated guidelines </p><p class="text-light font-weight-bolder">to make informed decisions regarding your travel.</p>
+                                          <p><a class="btn btn-lg btn-primary" href="https://www.cinemasafe.org/" target="_blank" role="button">See Guidelines</a></p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                          </a>
+                      </div>
 
-            </main>
-        </div>
-
-        <form>
-            <div class="form-group form-floating">
-                <label for="search_movie"></label>
-                <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies..." />
-            </div>
-        </form>
-
-        <div class="movie_list">
-            <div v-for="movie in movies">
-                <div class="movie-container" :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true;ui.showShow=false">
-
-                    <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col" v-show="ui.showCinema">
-                <h6 class="display-4">Cinemas</h6>
-                <div class="cinema_list">
-                    <div v-for="cinema in cinemas">
-
-                        <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio" />
-                            <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
-                                {{cinema.cinemaName}}
-                            </label>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col align-content-center" v-show="ui.showShow">
-                <h6 class="display-4 ">Shows</h6>
-                <div class="d-flex flex-row bd-highlight mt-4">
-                    <div v-for="show in shows">
-                        <div class="text-center d-flex justify-content-center">
-                            <ol class="list-group list-group-numbered text-center d-flex justify-content-center">
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        <div class="fw-bold p-2">{{show.showDate.split("T")[0] + " " + show.showDate.split("T")[1].substring(0,5) }}</div>
-                                        <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<=10, 'btn-warning' : (show.seatsAvailable>10 && show.seatsAvailable<=20) , 'btn-success': show.seatsAvailable>20} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
-                                    </div>
-
-                                </li>
-                            </ol>
-                        </div>
+                  </main>
+              </div>
+          }
 
 
-                    </div>
-                </div>
+          <form>
+              <div class="form-group form-floating">
+                  <label for="search_movie"></label>
+                  <input type="text" class="form-control" id="search_movie" ref="search_movie" v-on:keyup="dynamicSearch" placeholder="Search your favourite movies..." />
+              </div>
+          </form>
 
 
-                <div v-show="ui.showBookingForm">
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
 
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h5 class="modal-title">Book Your Show</h5>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="username">User Name</label>
-                                            <input type="text" class="form-control" id="username" ref="username" placeholder="User Name" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email" />
-                                            <small id="emailHelp" class="form-text text-muted">Enter you email</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="phone">Phone</label>
-                                            <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone" />
-                                        </div>
+          @if (Model.IsMobile)
+          {
+              <div class="card">
+                  <div v-for="movie in movies">
+                      <div :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true;ui.showShow=false">
+                          <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
+                      </div>
+                  </div>
 
+              </div>
 
-                                    </form>
-                                    <form action="/api/bookings/charge" method="post" v-on:click="stripeSubmit">
-                                        <script src="//checkout.stripe.com/v2/checkout.js"
-                                                class="stripe-button"
-                                                data-key="@Stripe.Value.PublishableKey"
-                                                data-description="this is the cost of movie ticket"
-                                                data-amount="1000">
-                                        </script>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
+          }
+          else
+          {
+              <div class="movie_list">
+                  <div v-for="movie in movies">
 
-                        </div>
-                    </div>
+                      <div class="movie-container" :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true;ui.showShow=false">
 
-                </div>
+                          <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
 
-            </div>
+                      </div>
 
-        </div>
+                  </div>
+              </div>
+          }
 
 
-        <div v-show="ui.showCinema">
 
-            <div id="map" style="height:400px;width:100%"></div>
+          <div class="row">
+              <div class="col" v-show="ui.showCinema">
+                  <h6 class="display-4">Cinemas</h6>
+                  <div class="cinema_list">
+                      <div v-for="cinema in cinemas">
 
-        </div>
+                          <div class="form-check" :id="'cinema-' + cinema.cinemaId" v-on:click="ui.showShow=true">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" :id="'radio-'+ cinema.cinemaId" :value="cinema.latitude+ ','+cinema.longitude" v-on:click="getradio" />
+                              <label class="form-check-label" :for="'radio-'+ cinema.cinemaId">
+                                  {{cinema.cinemaName}}
+                              </label>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+              <div class="col align-content-center" v-show="ui.showShow">
+                  <h6 class="display-4 ">Shows</h6>
+                  <div class="d-flex flex-row bd-highlight mt-4">
+                      <div v-for="show in shows">
+                          <div class="text-center d-flex justify-content-center">
+                              <ol class="list-group list-group-numbered text-center d-flex justify-content-center">
+                                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                                      <div class="ms-2 me-auto">
+                                          <div class="fw-bold p-2">{{show.showDate.split("T")[0] + " " + show.showDate.split("T")[1].substring(0,5) }}</div>
+                                          <button data-toggle="modal" data-target="#myModal" type="button" :class=" {'btn':true,'btn-danger': show.seatsAvailable<=10, 'btn-warning' : (show.seatsAvailable>10 && show.seatsAvailable<=20) , 'btn-success': show.seatsAvailable>20} " :id="'show-'+ show.showId" v-on:click="ui.showBookingForm=true;currentShow=show.showId">{{show.seatsAvailable + " seats left"}}</button>
+                                      </div>
+
+                                  </li>
+                              </ol>
+                          </div>
 
 
-    </div>
+                      </div>
+                  </div>
 
-    <div class="stripecheckout">
-        <label>amount: 500$</label>
-        <script src="//checkout.stripe.com/v2/checkout.js"
-                class="stripe-button"
-                data-key="@Stripe.Value.PublishableKey"
-                data-description="Make Payment"
-                data-amount="1000">
-        </script>
-    </div>
+
+                  <div v-show="ui.showBookingForm">
+                      <!-- Modal -->
+                      <div class="modal fade" id="myModal" role="dialog">
+                          <div class="modal-dialog">
+
+                              <!-- Modal content-->
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      <h5 class="modal-title">Book Your Show</h5>
+                                  </div>
+                                  <div class="modal-body">
+                                      <form>
+                                          <div class="form-group">
+                                              <label for="username">User Name</label>
+                                              <input type="text" class="form-control" id="username" ref="username" placeholder="User Name" />
+                                          </div>
+                                          <div class="form-group">
+                                              <label for="email">Email</label>
+                                              <input type="email" class="form-control" id="email" ref="useremail" aria-describedby="emailHelp" placeholder="Enter email" />
+                                              <small id="emailHelp" class="form-text text-muted">Enter you email</small>
+                                          </div>
+                                          <div class="form-group">
+                                              <label for="phone">Phone</label>
+                                              <input type="text" class="form-control" id="phone" ref="phone" placeholder="Phone" />
+                                          </div>
+
+
+                                      </form>
+                                      <form action="/api/bookings/charge" method="post" v-on:click="stripeSubmit">
+                                          <script src="//checkout.stripe.com/v2/checkout.js"
+                                                  class="stripe-button"
+                                                  data-key="@Stripe.Value.PublishableKey"
+                                                  data-description="this is the cost of movie ticket"
+                                                  data-amount="1000">
+                                          </script>
+                                      </form>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                              </div>
+
+                          </div>
+                      </div>
+
+                  </div>
+
+              </div>
+
+          </div>
+
+
+          <div v-show="ui.showCinema">
+
+              <div id="map" style="height:400px;width:100%"></div>
+
+          </div>
+
+
+      </div>
+
+      <div class="stripecheckout">
+          <label>amount: 500$</label>
+          <script src="//checkout.stripe.com/v2/checkout.js"
+                  class="stripe-button"
+                  data-key="@Stripe.Value.PublishableKey"
+                  data-description="Make Payment"
+                  data-amount="1000">
+          </script>
+      </div>
 
   </body>
 </html>

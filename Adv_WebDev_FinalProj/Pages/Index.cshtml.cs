@@ -11,7 +11,7 @@ namespace Adv_WebDev_FinalProj.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-
+        public bool IsMobile { get; set; }
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
@@ -19,6 +19,8 @@ namespace Adv_WebDev_FinalProj.Pages
 
         public void OnGet()
         {
+            var userAgent = Request.Headers["User-Agent"];
+            IsMobile = userAgent.ToString().Contains("mobile", StringComparison.OrdinalIgnoreCase);
 
         }
     }
