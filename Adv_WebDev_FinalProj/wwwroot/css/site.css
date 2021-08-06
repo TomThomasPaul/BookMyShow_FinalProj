@@ -105,3 +105,26 @@ body {
     margin-top: 50px;
     margin-bottom: 50px;
 }
+.mov-img-mob {
+    height: 33vh;
+    width: 40vw;
+    padding: 3px;
+}
+.movie_list-mobile {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.mobile-label{
+    margin-top:20px;
+    
+}
+.mapStyle-mobile {
+    height: 250px;
+    width: 66%;
+    margin-top:10px;
+}
+.mapStyle {
+    height: 400px;
+    width: 100%
+}

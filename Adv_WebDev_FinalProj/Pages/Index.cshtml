@@ -6,6 +6,7 @@
     ViewData["Title"] = "Home page";
 }
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
@@ -102,10 +103,10 @@
 
           @if (Model.IsMobile)
           {
-              <div class="card">
+              <div class="movie_list-mobile card-deck">
                   <div v-for="movie in movies">
                       <div :id="'movie-' + movie.movieId" v-on:click="ui.showCinema=true;ui.showShow=false">
-                          <img class="movie-image" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
+                          <img class="movie-image mov-img-mob" alt="Movie Image" v-bind:src="movie.image" v-on:click="getCinemas" />
                       </div>
                   </div>
 
@@ -131,7 +132,18 @@
 
           <div class="row">
               <div class="col" v-show="ui.showCinema">
-                  <h6 class="display-4">Cinemas</h6>
+                  @if (Model.IsMobile)
+                  {
+                      <h6 class="mobile-label">Cinemas</h6>
+                  }
+                  else
+                  {
+                      <h6 class="display-4">Cinemas</h6>
+
+                  }
+
+
+
                   <div class="cinema_list">
                       <div v-for="cinema in cinemas">
 
@@ -146,7 +158,16 @@
                   </div>
               </div>
               <div class="col align-content-center" v-show="ui.showShow">
-                  <h6 class="display-4 ">Shows</h6>
+                  @if (Model.IsMobile)
+                  {
+                      <h6 class="mobile-label">Shows</h6>
+                  }
+                  else
+                  {
+                      <h6 class="display-4">Shows</h6>
+
+                  }
+                  
                   <div class="d-flex flex-row bd-highlight mt-4">
                       <div v-for="show in shows">
                           <div class="text-center d-flex justify-content-center">
@@ -221,7 +242,17 @@
 
           <div v-show="ui.showCinema">
 
-              <div id="map" style="height:400px;width:100%"></div>
+              @if (Model.IsMobile)
+              {
+                   <div id="map" class="mapStyle-mobile" ref="map" ></div>
+              }
+              else
+              {
+                 <div id="map" class="mapStyle" ></div>
+
+              }
+
+              
 
           </div>
 
@@ -270,7 +301,8 @@
                     showBookingForm: false,
                     showStripe: false,
                     showCarousel: true
-                }
+                },
+                mapMobile:false,
             },
             mounted: function () {
                 // PERFORM ANY ACTIONS WHEN THE PAGE LOADS HERE - SIMILAR TO JQUERY DOCUMENT.READY
@@ -287,6 +319,11 @@
                 let externalScript = document.createElement('script')
                 externalScript.setAttribute('src', 'https://checkout.stripe.com/v2/checkout.js')
                 $(".stripecheckout").hide();
+
+                if (self.$refs.search_movie) {
+
+                    self.mapMobile = true;
+                }
 
             },
             methods: {
@@ -305,8 +342,10 @@
                             home = { lat: parseFloat(cinemas[0]), lng: parseFloat(cinemas[1]) };
                         }
 
+                        
+
                         const map = new google.maps.Map(document.getElementById("map"), {
-                            zoom: zoomIn ? 18 : 7,
+                            zoom: zoomIn ? 18 : (self.mapMobile? 5 : 7),
                             center: home,
                         });
 
@@ -624,4 +663,4 @@
 
 
 }
-</html>
+@*</html>*@
